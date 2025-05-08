@@ -6,6 +6,8 @@ import argparse
 import itertools
 from collections import Counter
 from collections import deque
+import subprocess
+import asyncio
 
 import cv2 as cv
 import numpy as np
@@ -17,6 +19,7 @@ import sys
 from utils import CvFpsCalc
 from model import KeyPointClassifier
 from model import PointHistoryClassifier
+
 
 
 def get_args():
@@ -44,6 +47,7 @@ def get_args():
 def main():
     # Argument parsing #################################################################
     args = get_args()
+    index = 1
 
     cap_device = args.device
     cap_width = args.width
@@ -171,8 +175,38 @@ def main():
                     keypoint_classifier_labels[hand_sign_id],
                     point_history_classifier_labels[most_common_fg_id[0][0]],
                 )
-                print(keypoint_classifier_labels[hand_sign_id])
+                
+                # record time now
+                flag = time.time()
+                ignore_duration = 120
+                
 
+
+
+                # if hand_sign_id == 0:
+                #     # first ignore for ignore_duration seconds
+                #     if now - ignore_duration > 0:
+                #         # run the script
+                #         print(keypoint_classifier_labels[hand_sign_id])
+                #         proc = subprocess.Popen(
+                #             ['python3', 'zero_client.py'],
+                #             stdout=subprocess.PIPE,
+                #             stderr=subprocess.STDOUT,
+                #             text=True,
+                #         )
+                if hand_sign_id == 2:
+                    if time.time() - flag > ignore_duration or index == 1:
+                        # run the script
+                        print(keypoint_classifier_labels[hand_sign_id])
+                        proc = subprocess.Popen(
+                            ['python3', 'two_client.py'],
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT,
+                            text=True,
+                        )
+                        index = 0
+                    else:
+                        print("ignore")
 
         else:
             point_history.append([0, 0])
