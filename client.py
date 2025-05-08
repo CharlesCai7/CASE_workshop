@@ -1,17 +1,16 @@
+# client.py
 import socket
 
-def send_message(host: str, port: int, message: str):
-    # create a TCP socket
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.connect((host, port))
-        # encode to bytes and send
-        sock.sendall(message.encode('utf-8'))
-        # optionally wait for a reply
-        # reply = sock.recv(1024).decode('utf-8')
-        # print("Reply:", reply)
+HOST = 'SERVER_IP_OR_HOSTNAME'
+PORT = 5000
 
-if __name__ == "__main__":
-    REMOTE_HOST = "192.168.1.42"   # change to your server’s IP or hostname
-    REMOTE_PORT = 65432            # same port the C++ server will bind to
-    send_message(REMOTE_HOST, REMOTE_PORT, "run_analysis --data file.csv")
-    print("Message sent!")
+# The Python code you want the remote to run:
+payload = """
+for i in range(3):
+    print("Hello from the remote side!", i)
+"""
+
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+    sock.connect((HOST, PORT))
+    sock.sendall(payload.encode('utf-8'))
+    # once we close the socket, the server will finish receiving and exec
