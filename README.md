@@ -1,3 +1,12 @@
+# Combine python with C++
+```bash
+python3 app.py | g++ main.cpp -o main && ./main
+```
+Or you can use popen()
+
+
+
+
 # Requirements
 * mediapipe 0.8.1
 * OpenCV 3.4.2 or Later

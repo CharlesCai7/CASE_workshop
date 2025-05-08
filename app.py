@@ -10,6 +10,9 @@ from collections import deque
 import cv2 as cv
 import numpy as np
 import mediapipe as mp
+import time
+import os
+import sys
 
 from utils import CvFpsCalc
 from model import KeyPointClassifier
@@ -168,6 +171,9 @@ def main():
                     keypoint_classifier_labels[hand_sign_id],
                     point_history_classifier_labels[most_common_fg_id[0][0]],
                 )
+                print(keypoint_classifier_labels[hand_sign_id])
+
+
         else:
             point_history.append([0, 0])
 
