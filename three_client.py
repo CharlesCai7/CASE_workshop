@@ -61,7 +61,7 @@ def main():
         for script in urscripts1:
             if not send_urscript_command(sock, script):
                 break
-            time.sleep(6)
+            time.sleep(5)
 
         # Send final batch
         for script in urscripts2:
