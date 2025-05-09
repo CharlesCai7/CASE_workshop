@@ -26,13 +26,13 @@ def main():
         "movej([1.57, -1.57, 0, -3.14, -1.65, -1.46], a=2.0, v=0.3)\n",
     ]
 
-    # Second batch (2 s between each)
+    # Second batch (6 s between each)
     urscripts1 = [
-        "movej([1.57, -1.57, 0, -1.57, -1.57, -1.57], a=2.0, v=0.8)\n",
-        "movej([1.57, -2.09, 0.79, -0.79, -1.65, -1.46], a=2.0, v=0.8)\n",
-        "movej([0, -1.05, -0.79, -2.36, -1.65, -1.46], a=2.0, v=0.8)\n",
-        "movej([1.57, -2.09, 0.79, -0.79, -1.65, -1.46], a=2.0, v=0.8)\n",
-        "movej([0, -1.05, -0.79, -2.36, -1.65, -1.46], a=2.0, v=0.8)\n",
+        "movej([0, -1.57, 0, -1.57, -1.57, -1.57], a=2.0, v=0.8)\n",
+        "movej([3.14, -1.57, 0.79, 1.57, -1.57, -1.57], a=2.0, v=0.8)\n",
+        "movej([0, -1.57, -0.79, -1.57, -1.57, -1.57], a=2.0, v=0.8)\n",
+        "movej([3.14, -1.57, 0.79, 1.57, -1.57, -1.57], a=2.0, v=0.8)\n",
+        "movej([0, -1.57, -0.79, -1.57, -1.57, -1.57], a=2.0, v=0.8)\n",
         "movej([1.57, -1.57, 0, -3.14, -1.65, -1.46], a=2.0, v=0.8)\n",
     ]
 
@@ -41,7 +41,7 @@ def main():
         "movej([0, -0.69, -2.62, -0.05, -3.07, -2.79], a=2.0, v=0.3)\n",
     ]
 
-    # Connect
+    # Establish connection
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((HOST, PORT))
@@ -51,16 +51,19 @@ def main():
         return
 
     try:
+        # Send first batch
         for script in urscripts:
             if not send_urscript_command(sock, script):
                 break
             time.sleep(12)
 
+        # Send second batch
         for script in urscripts1:
             if not send_urscript_command(sock, script):
                 break
-            time.sleep(3.5)
+            time.sleep(6)
 
+        # Send final batch
         for script in urscripts2:
             send_urscript_command(sock, script)
 
@@ -70,3 +73,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

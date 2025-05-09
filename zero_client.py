@@ -22,7 +22,7 @@ def main():
 
     # All your sequences of URScript commands:
     urscripts = [
-        "movej([0, -0.69, -2.62, -0.05, -3.07, -2.79], a=2.0, v=0.3)\n",
+        # "movej([0, -0.69, -2.62, -0.05, -3.07, -2.79], a=2.0, v=0.3)\n",
         "movej([1.57, -1.57, 0, -3.14, -1.65, -1.46], a=2.0, v=0.3)\n",
     ]
 

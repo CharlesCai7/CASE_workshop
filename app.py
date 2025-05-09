@@ -47,7 +47,7 @@ def get_args():
 def main():
     # Argument parsing #################################################################
     args = get_args()
-    index = 1
+    ignore_flag = True
 
     cap_device = args.device
     cap_width = args.width
@@ -114,6 +114,10 @@ def main():
             break
         number, mode = select_mode(key, mode)
 
+        # if user pressed "i" key, ignore the gesture
+        if key == 105:  # i
+            ignore_flag = False
+
         # Camera capture #####################################################
         ret, image = cap.read()
         if not ret:
@@ -175,28 +179,22 @@ def main():
                     keypoint_classifier_labels[hand_sign_id],
                     point_history_classifier_labels[most_common_fg_id[0][0]],
                 )
-                
-                # record time now
-                flag = time.time()
-                ignore_duration = 120
-                
-
-
-
-                # if hand_sign_id == 0:
-                #     # first ignore for ignore_duration seconds
-                #     if now - ignore_duration > 0:
-                #         # run the script
-                #         print(keypoint_classifier_labels[hand_sign_id])
-                #         proc = subprocess.Popen(
-                #             ['python3', 'zero_client.py'],
-                #             stdout=subprocess.PIPE,
-                #             stderr=subprocess.STDOUT,
-                #             text=True,
-                #         )
-                if hand_sign_id == 2:
-                    if time.time() - flag > ignore_duration or index == 1:
-                        # run the script
+                if hand_sign_id == 0:
+                    if ignore_flag:
+                        continue
+                    else:
+                        print(keypoint_classifier_labels[hand_sign_id])
+                        proc = subprocess.Popen(
+                            ['python3', 'zero_client.py'],
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT,
+                            text=True,
+                        )
+                        ignore_flag = True
+                elif hand_sign_id == 2:
+                    if ignore_flag:
+                        continue
+                    else:
                         print(keypoint_classifier_labels[hand_sign_id])
                         proc = subprocess.Popen(
                             ['python3', 'two_client.py'],
@@ -204,9 +202,20 @@ def main():
                             stderr=subprocess.STDOUT,
                             text=True,
                         )
-                        index = 0
+                        ignore_flag = True
+                elif hand_sign_id == 3:
+                    if ignore_flag:
+                        continue
                     else:
-                        print("ignore")
+                        print(keypoint_classifier_labels[hand_sign_id])
+                        proc = subprocess.Popen(
+                            ['python3', 'three_client.py'],
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT,
+                            text=True,
+                        )
+                        ignore_flag = True
+                        
 
         else:
             point_history.append([0, 0])
